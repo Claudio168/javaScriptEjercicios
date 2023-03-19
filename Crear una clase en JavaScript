@@ -13,21 +13,4 @@ let perro = new Animal("Fido", 5);
 console.log(perro.nombre); // Output: Fido
 console.log(perro.edad); // Output: 5
 perro.comer("croquetas"); // Output: Fido está comiendo croquetas.
-Implementar una función de ordenamiento en JavaScript
-javascript
-Copy code
-function ordenarArray(array) {
-  return array.sort(function (a, b) {
-    return a - b;
-  });
-}
 
-let numeros = [3, 1, 5, 2, 4];
-console.log(ordenarArray(numeros)); // Output: [1, 2, 3, 4, 5]
-Espero que te sean útiles estos ejemplos. Recuerda que para subirlos a tu GitHub, debes crear un nuevo repositorio y subir los archivos correspondientes.
-
-
-
-
-
-Regenerate response
