@@ -1,0 +1,136 @@
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const CELL_SIZE = 20;
+const BOARD_SIZE = 20;
+const MAX_FOODS = 5;
+
+let foods = [];
+let snake = [];
+let direction = 'right';
+
+function drawCell(x, y, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+}
+
+function createFood() {
+  const foodX = Math.floor(Math.random() * BOARD_SIZE);
+  const foodY = Math.floor(Math.random() * BOARD_SIZE);
+  return {
+    x: foodX,
+    y: foodY,
+  };
+}
+
+function drawSnake() {
+  snake.forEach(function(cell) {
+    drawCell(cell.x, cell.y, 'green');
+  });
+}
+
+function moveSnake() {
+  const head = {
+    x: snake[0].x,
+    y: snake[0].y,
+  };
+  switch (direction) {
+    case 'up':
+      head.y--;
+      break;
+    case 'down':
+      head.y++;
+      break;
+    case 'left':
+      head.x--;
+      break;
+    case 'right':
+      head.x++;
+      break;
+  }
+  snake.unshift(head);
+  if (isFood(head.x, head.y)) {
+    eatFood(head.x, head.y);
+  } else {
+    snake.pop();
+  }
+}
+
+function isFood(x, y) {
+  return foods.some(function(food) {
+    return food.x === x && food.y === y;
+  });
+}
+
+function eatFood(x, y) {
+  foods = foods.filter(function(food) {
+    return food.x !== x || food.y !== y;
+  });
+  const newFood = createFood();
+  foods.push(newFood);
+}
+
+function drawFoods() {
+  foods.forEach(function(food) {
+    drawCell(food.x, food.y, 'red');
+  });
+}
+
+function gameOver() {
+  clearInterval(gameLoop);
+  alert('Juego terminado!');
+}
+
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  moveSnake();
+  if (isGameOver()) {
+    gameOver();
+  }
+  drawSnake();
+  drawFoods();
+}
+
+function isGameOver() {
+  const head = snake[0];
+  return (
+    head.x < 0 ||
+    head.y < 0 ||
+    head.x >= BOARD_SIZE ||
+    head.y >= BOARD_SIZE ||
+    snake.slice(1).some(function(cell) {
+      return cell.x === head.x && cell.y === head.y;
+    })
+  );
+}
+
+function handleKeyDown(event) {
+  switch (event.code) {
+    case 'ArrowUp':
+      direction = 'up';
+      break;
+    case 'ArrowDown':
+      direction = 'down';
+      break;
+    case 'ArrowLeft':
+      direction = 'left';
+      break;
+    case 'ArrowRight':
+      direction = 'right';
+      break;
+  }
+}
+
+document.addEventListener('keydown', handleKeyDown);
+
+for (let i = 0; i < 5; i++) {
+  const food = createFood();
+  foods.push(food);
+}
+
+snake.push({ x: 10, y: 10 });
+snake.push({ x: 9, y: 10 });
+snake.push({ x: 8, y: 10 });
+
+const gameLoop = setInterval(update, 100);
+
