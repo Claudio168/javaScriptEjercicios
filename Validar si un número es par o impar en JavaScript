@@ -1,0 +1,9 @@
+function esPar(num) {
+  if (num % 2 === 0) {
+    console.log("El número es par.");
+  } else {
+    console.log("El número es impar.");
+  }
+}
+esPar(4); // Output: El número es par.
+esPar(7); // Output: El número es impar.
